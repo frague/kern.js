@@ -47,8 +47,8 @@
         html +=         '<form class="kernjs_unit" action="">';
         html +=             '<section><input type="button" name="kernjs_unit" value="em" id="em" /></section>';
         html +=             '<section><input type="button" name="kernjs_unit" value="px" /></section>';
-        html +=             '<section><div><input type="checkbox" id="kernjs_vert" name="kernjs_vert" /> Allow vertical adjustment</div>';
-        html +=             '<div><input type="checkbox" id="kernjs_size" name="kernjs_size" /> Allow size adjustment</div></section>';
+        html +=             '<section><input type="checkbox" id="kernjs_vert" name="kernjs_vert" /> Vertical adjustment<section>';
+        html +=             '<section><input type="checkbox" id="kernjs_size" name="kernjs_size" /> Size adjustment</section>';
         html +=     '   </form>';
         html +=     '</div>';
 
