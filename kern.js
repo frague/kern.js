@@ -103,6 +103,7 @@
         	this.vertical = this.element.css('position') == 'relative' ? parseInt(this.element.css('top')) : 0;	// If element is relatively positioned - get it's top offset
         	if (isNaN(this.vertical)) this.vertical = 0;
         	this.size = 100;
+        	this.angle = 0;
         }
 
         // Kerning adjustment logic
@@ -131,16 +132,29 @@
             this.element.css('font-size', this.size + '%'); // change letter size
         }
 
+        // Size adjustment logic
+        adjustment.prototype.set_angle = function(a) {
+        	if (!sizeFlag) return;
+        	this.angle += a;
+        	var deg = 'rotate(' + Math.round(a) + 'deg)';
+            this.element.css('-webkit-transform', deg);
+            this.element.css('-moz-transform', deg);
+            this.element.css('-o-transform', deg);
+        }
+
         // Converting adjustment to css
         adjustment.prototype.to_css = function(in_em) {
         	css = new Array();
-        	if (this.kerning) {
+        	if (this.kerning) {		// Kerning
         		css.push('margin-left: ' + (in_em ? em(this.kerning) + 'em;' : this.kerning.toString() + 'px;'));
         	}
-        	if (this.vertical && verticalFlag) {
+        	if (this.vertical && verticalFlag) {	// Vertical offset
         		css.push('display: inline-block;');
         		css.push('position: relative;');
         		css.push('top: ' + (in_em ? em(this.vertical) + 'em;' : this.vertical.toString() + 'px;'));
+        	}
+        	if (this.size != 100 && sizeFlag) {		// Font size
+        		css.push('font-size: ' + this.size + '%;');
         	}
         	return '\t' + css.join('\n\t');
         }
@@ -249,11 +263,12 @@
                         renew = 0
                         var moveX = event.pageX - lastX;
                         var moveY = event.pageY - lastY;
-                        if (event.shiftKey) {
+                        if (event.shiftKey) {	// If Shift key is pressed - change letter size
        	                    adj.set_size(moveX);
            	                renew = 1;
-                        } else if (event.altKey) {
-                        
+                        } else if (event.altKey) {	// If Alt key is pressed - rotate letter
+       	                    adj.set_angle(moveX);
+           	                renew = 1;
                         } else {
 	                        if (moveX !== 0) {
         	                    adj.set_kerning(moveX);
