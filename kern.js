@@ -24,6 +24,7 @@
         unitFlag,
         verticalFlag,
         sizeFlag,
+        angleFlag,
         altHold = 0,
         shiftHold = 0,
         location;
@@ -51,6 +52,7 @@
         html +=             '<section><input type="button" name="kernjs_unit" value="px" /></section>';
         html +=             '<section><input type="checkbox" id="kernjs_vert" name="kernjs_vert" /> Vertical adjustment<section>';
         html +=             '<section><input type="checkbox" id="kernjs_size" name="kernjs_size" /> Size (hold Shift)</section>';
+        html +=             '<section><input type="checkbox" id="kernjs_angle" name="kernjs_angle" /> Angle (hold Alt)</section>';
         html +=     '   </form>';
         html +=     '</div>';
 
@@ -81,15 +83,14 @@
         });
         jQuery('.kernjs_unitSelect #em').click();
 
-        jQuery('.kernjs_unitSelect #kernjs_vert').click(function() {
-        	verticalFlag = jQuery(this).is(':checked');
+        jQuery('.kernjs_unitSelect input:checkbox').click(function() {
+        	verticalFlag = jQuery('#kernjs_vert').is(':checked');
+        	sizeFlag = jQuery('#kernjs_size').is(':checked');
+        	angleFlag = jQuery('#kernjs_angle').is(':checked');
 		});
         verticalFlag = 0;
-
-        jQuery('.kernjs_unitSelect #kernjs_size').click(function() {
-        	sizeFlag = jQuery(this).is(':checked');
-		});
         sizeFlag = 0;
+        angleFlag = 0;
 
         // Returns value in em
         function em(value) {
@@ -134,9 +135,9 @@
 
         // Size adjustment logic
         adjustment.prototype.set_angle = function(a) {
-        	if (!sizeFlag) return;
+        	if (!angleFlag) return;
         	this.angle += a;
-        	var deg = 'rotate(' + Math.round(a) + 'deg)';
+        	var deg = 'rotate(' + Math.round(this.angle) + 'deg)';
             this.element.css('-webkit-transform', deg);
             this.element.css('-moz-transform', deg);
             this.element.css('-o-transform', deg);
