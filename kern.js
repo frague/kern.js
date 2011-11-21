@@ -99,6 +99,7 @@
         	this.element = el;
         	this.kerning = 0;
         	this.vertical = this.element.css('position') == 'relative' ? parseInt(this.element.css('top')) : 0;	// If element is relatively positioned - get it's top offset
+        	if (isNaN(this.vertical)) this.vertical = 0;
         }
 
         // Kerning adjustment logic
