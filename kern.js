@@ -24,6 +24,8 @@
         unitFlag,
         verticalFlag,
         sizeFlag,
+        altHold = 0,
+        shiftHold = 0,
         location;
         location = "http://frague.github.com/kern.js/";		// "http://bstro.github.com/kern.js/"
         kerning = 0;
@@ -48,7 +50,7 @@
         html +=             '<section><input type="button" name="kernjs_unit" value="em" id="em" /></section>';
         html +=             '<section><input type="button" name="kernjs_unit" value="px" /></section>';
         html +=             '<section><input type="checkbox" id="kernjs_vert" name="kernjs_vert" /> Vertical adjustment<section>';
-        html +=             '<section><input type="checkbox" id="kernjs_size" name="kernjs_size" /> Size adjustment</section>';
+        html +=             '<section><input type="checkbox" id="kernjs_size" name="kernjs_size" /> Size (hold Shift)</section>';
         html +=     '   </form>';
         html +=     '</div>';
 
@@ -100,6 +102,7 @@
         	this.kerning = 0;
         	this.vertical = this.element.css('position') == 'relative' ? parseInt(this.element.css('top')) : 0;	// If element is relatively positioned - get it's top offset
         	if (isNaN(this.vertical)) this.vertical = 0;
+        	this.size = 100;
         }
 
         // Kerning adjustment logic
@@ -119,6 +122,13 @@
 	        } else {
 	            this.element.css('position', 'inline'); // make position back inline
 	        }
+        }
+
+        // Size adjustment logic
+        adjustment.prototype.set_size = function(s) {
+        	if (!sizeFlag) return;
+        	this.size += s;
+            this.element.css('font-size', this.size + '%'); // change letter size
         }
 
         // Converting adjustment to css
@@ -238,17 +248,24 @@
                     function MoveHandler(event) {
                         renew = 0
                         var moveX = event.pageX - lastX;
-                        if (moveX !== 0) {
-                            lastX = event.pageX;
-                            adj.set_kerning(moveX);
-                            renew = 1;
-                        }
                         var moveY = event.pageY - lastY;
-                        if (moveY !== 0) {
-                            lastY = event.pageY;
-                            adj.set_vertical(moveY);
-							renew = 1
-                        }
+                        if (event.shiftKey) {
+       	                    adj.set_size(moveX);
+           	                renew = 1;
+                        } else if (event.altKey) {
+                        
+                        } else {
+	                        if (moveX !== 0) {
+        	                    adj.set_kerning(moveX);
+            	                renew = 1;
+                	        }
+                    	    if (moveY !== 0) {
+                            	adj.set_vertical(moveY);
+								renew = 1
+    	                    }
+    	                }
+ 	                    lastX = event.pageX;
+                       	lastY = event.pageY;
                         if (renew) {
                             adjustments[elid + "." + jQuery(activeEl).attr("class")] = adj;
                             generateCSS(adjustments, emPx, unitFlag); // make stored adjustment in generated CSS
