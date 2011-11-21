@@ -155,10 +155,18 @@
         	if (this.kerning) {		// Kerning
         		css.push('margin-left: ' + (in_em ? em(this.kerning) + 'em;' : this.kerning.toString() + 'px;'));
         	}
-        	if (this.vertical && verticalFlag) {	// Vertical offset
+        	if ((this.vertical && verticalFlag) || (this.angle && angleFlag)) {	// Relative positioning
         		css.push('display: inline-block;');
         		css.push('position: relative;');
-        		css.push('top: ' + (in_em ? em(this.vertical) + 'em;' : this.vertical.toString() + 'px;'));
+        		if (this.vertical && verticalFlag) {	// Vertical offset
+	        		css.push('top: ' + (in_em ? em(this.vertical) + 'em;' : this.vertical.toString() + 'px;'));
+	        	}
+	        	if (this.angle && angleFlag) {		// Angle
+        			var deg = 'rotate(' + Math.round(this.angle) + 'deg);';
+            		css.push('-webkit-transform' + deg);
+		            css.push('-moz-transform' + deg);
+		            css.push('-o-transform' + deg);
+	        	}
         	}
         	if (this.size != 100 && sizeFlag) {		// Font size
         		css.push('font-size: ' + this.size + '%;');
