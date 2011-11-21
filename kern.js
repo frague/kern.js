@@ -113,17 +113,22 @@
             this.element.css('margin-left', this.kerning.toString() + 'px'); // make live adjustment in DOM
         }
 
+        // Makes letter relative
+        adjustment.prototype.make_relative = function() {
+        	if (this.angle || this.vertical) {
+                this.element.css('position', 'relative'); // make position relative
+	            this.element.css('display', 'inline-block'); // make position relative
+        	} else {
+	            this.element.css('position', 'inline'); // make position back inline
+        	}
+        }
+        
         // Vertical offset adjustment logic
         adjustment.prototype.set_vertical = function(v) {
         	if (!verticalFlag) return;
         	this.vertical += v;
-            if (this.vertical) {
-                this.element.css('position', 'relative'); // make position relative
-	            this.element.css('display', 'inline-block'); // make position relative
-	            this.element.css('top', this.vertical.toString() + 'px'); // make live adjustment in DOM
-	        } else {
-	            this.element.css('position', 'inline'); // make position back inline
-	        }
+        	this.make_relative();
+            this.element.css('top', this.vertical.toString() + 'px'); // make live adjustment in DOM
         }
 
         // Size adjustment logic
@@ -137,6 +142,7 @@
         adjustment.prototype.set_angle = function(a) {
         	if (!angleFlag) return;
         	this.angle += a;
+        	this.make_relative();
         	var deg = 'rotate(' + Math.round(this.angle) + 'deg)';
             this.element.css('-webkit-transform', deg);
             this.element.css('-moz-transform', deg);
