@@ -1,0 +1,23 @@
+body {
+	margin: 0;
+}
+span {
+	position: relative;
+}
+
+h1, h2, h3 {
+	font-family: helvetica, arial;
+	position: relative;
+	font-size: 10em;
+	line-height: .2em;
+}
+
+#container {
+	margin: 0 auto;
+	text-align: center;
+}
+
+#content {
+	margin: 0 auto;
+	text-align: center;
+}
